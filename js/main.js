@@ -228,10 +228,7 @@ let blockify
 }
 
 const tree = parse(`
-forever {
-  says 'Ayy', 1
-  says 'Lmaoium', 1
-}
+say var('(parentheses)')
 `)
 
 console.log('tree:', JSON.stringify(tree, null, 2))

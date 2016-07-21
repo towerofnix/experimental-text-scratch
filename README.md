@@ -60,4 +60,48 @@ Each argument is an expression, which can be a string:
 
 Everything that's part of the `blockifyDictionary` definition in [js/main.js](js/main.js).
 
-TODO: Actually list the commands here!
+<table width="100%"><tr>
+<th>	Code
+<th>	Example Code
+<th>	Resulting Scratch Script
+</tr><tr>
+<td>	<code>say string</code>
+<td>	<pre>say 'Where did "kaz" come from?'</pre>
+<td>	<a href="img/readme/say.png"><img src="img/readme/say.png"></a>
+</tr><tr>
+<td>	<code>says string, number</code>
+<td>	<pre>says 'Hello, world!', 2</pre>
+<td>	<a href="img/readme/says.png"><img src="img/readme/says.png"></a>
+</tr><tr>
+<td>	<code>forever stack</code>
+<td>	<pre>forever {<br>  says 'Ayy', 1<br>  says 'Lmaoium', 1<br>}</pre>
+<td>	<a href="img/readme/forever.png"><img src="img/readme/forever.png"></a>
+</tr><tr>
+<td>	<code>waits number</code>
+<td>	<pre>says 'Nahh...', 1<br>waits 1<br>says 'wait, no way!', 1</pre>
+<td>	<a href="img/readme/waits.png"><img src="img/readme/waits.png"></a>
+</tr><tr>
+<td>	<code>add(number, number)</code>
+<td>	<pre>say add(1, 2)</pre>
+<td>	<a href="img/readme/add.png"><img src="img/readme/add.png"></a>
+</tr><tr>
+<td>	<code>sub(number, number)</code>
+<td>	<pre>say sub(7, 3)</pre>
+<td>	<a href="img/readme/sub.png"><img src="img/readme/sub.png"></a>
+</tr><tr>
+<td>	<code>join(string, string)</code>
+<td>	<pre>say join('Hello ', 'world')</pre>
+<td>	<a href="img/readme/join.png"><img src="img/readme/join.png"></a>
+</tr><tr>
+<td>	<code>joinmul(string, ...string)</code>
+<td>	<pre>say joinmul('Hello ', ' less nested', ' blocks!'</pre>
+<td>	<a href="img/readme/joinmul.png"><img src="img/readme/joinmul.png"></a>
+</tr><tr>
+<td>	<code>forrange string, number, number, stack</code>
+<td>	<pre>forrange 'i', 1, 3, {<br>  says $i, 1<br>}</pre>
+<td>	<a href="img/readme/forrange.png"><img src="img/readme/forrange.png"></a>
+</tr><tr>
+<td>	<code>var(string literal)</code>
+<td>	<pre>say var('(parentheses)')</pre>
+<td>	<a href="img/readme/var.png"><img src="img/readme/var.png"></a>
+</tr></table>
