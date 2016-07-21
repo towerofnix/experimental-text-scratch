@@ -28,3 +28,36 @@ Now that you have that code, feel free to cry at markdown (or just my editor?) f
 15. Click on the script.
 16. ???
 17. Profit!
+
+## Okay, but what about the syntax?
+
+[Here you go!](js/grammar.ne) Nah, I'm not that mean.
+
+A program is a set of lines, each representing one stack block in Scratch. A line follows the form of:
+
+	blockname arg1, arg2, arg3...
+
+Each argument is an expression, which can be a string:
+
+	'kaz'
+
+..a number:
+
+	110026
+
+..a script:
+
+	{
+	  kaz
+	}
+
+..or a variable:
+
+	$name
+	$(this name has spaces in it)
+
+## What commands?
+
+Everything that's part of the `blockifyDictionary` definition in [js/main.js](js/main.js).
+
+TODO: Actually list the commands here!
