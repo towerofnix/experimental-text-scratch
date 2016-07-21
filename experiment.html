@@ -3,16 +3,147 @@
   <head>
     <meta charset='utf-8'>
     <title>Hello, world</title>
+
     <style>
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
     body {
       background: #EEE;
+      font-family: 'Helvetica Neue', Helvetica;
     }
+
+    #editor {
+      display: flex;
+      background: #009BFF;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #editor-textarea {
+      margin-right: 40px;
+      resize: horizontal;
+      width: calc(100% - 340px);
+      min-width: 200px;
+    }
+
+    #editor-output {
+      min-width: 200px;
+      flex-grow: 1;
+      resize: none;
+    }
+
+    #oops {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30px;
+      line-height: 20px;
+      padding: 5px;
+      box-sizing: border-box;
+      background: red;
+    }
+
+    #oops:empty {
+      display: none;
+    }
+
     </style>
   </head>
   <body>
-    <p>Hi</p>
+    <div id='editor'>
+      <textarea id='editor-textarea'></textarea>
+      <textarea id='editor-output'></textarea>
+      <div id='oops'></div>
+    </div>
+
     <script src="lib/nearley.js"></script>
     <script src="js/grammar.js"></script>
     <script src="js/main.js"></script>
+
+    <script>
+      const inputTextarea = document.getElementById('editor-textarea')
+      const outputTextarea = document.getElementById('editor-output')
+      const oops = document.getElementById('oops')
+
+      const compile = () => {
+        while (oops.firstChild) oops.firstChild.remove()
+        try {
+          const tree = parse(inputTextarea.value)
+          if (tree) {
+            const blocks = blockify(tree)
+            outputTextarea.value = blocks
+          }
+        } catch(e) {
+          console.error(e)
+          while (oops.firstChild) oops.firstChild.remove()
+          oops.appendChild(document.createTextNode(e))
+        }
+      }
+
+      let compileTimer
+
+      const change = () => {
+        clearTimeout(compileTimer)
+        compileTimer = setTimeout(compile, 500)
+      }
+
+      const getIndent = line => line.match(/^\s*/)[0].length
+
+      inputTextarea.addEventListener('change', change)
+      inputTextarea.addEventListener('keyup', change)
+
+      inputTextarea.addEventListener('keydown', e => {
+        const start = inputTextarea.selectionStart
+        const end = inputTextarea.selectionEnd
+        const value = inputTextarea.value
+
+        if (e.keyCode == 9) {
+          // When the tab key is pressed, insert 2 spaces at the cursor.
+
+          const start = inputTextarea.selectionStart
+          const end = inputTextarea.selectionEnd
+          const value = inputTextarea.value
+          inputTextarea.value = value.substring(0, start) + '  ' + value.substring(end)
+          inputTextarea.selectionStart = end + 2
+          inputTextarea.selectionEnd = end + 2
+          e.preventDefault()
+        } else if (e.keyCode == 13) {
+          // When the enter key is pressed, if there's a "{" immediately
+          // before the cursor, indent the next line by an additional 2 spaces.
+
+          const upToCursor = value.substring(0, start)
+          const activeLine = upToCursor.split('\n').slice(-1)[0]
+          let indent = getIndent(activeLine)
+          if (value[start - 1] == '{') {
+            indent += 2
+          }
+          const insert = '\n' + ' '.repeat(indent)
+          inputTextarea.value = upToCursor + insert + value.substring(end)
+          inputTextarea.selectionStart = end + insert.length
+          inputTextarea.selectionEnd = end + insert.length
+          e.preventDefault()
+        } else if (e.keyCode == 221 && e.shiftKey) { // }
+          // When the "}" key is typed, if all before the cursor on the active
+          // line is whitespace, decrease the indent by 2.
+
+          const upToCursor = value.substring(0, start)
+          const activeLine = upToCursor.split('\n').slice(-1)[0]
+          const indent = getIndent(activeLine)
+          if (activeLine.indexOf('  ') == 0 && value.indexOf('  ', start - activeLine.length) == start - indent) {
+            inputTextarea.value = upToCursor.slice(0, -2) + value.substring(end)
+            inputTextarea.selectionStart = end - 2
+            inputTextarea.selectionEnd = end - 2
+          }
+        }
+      })
+    </script>
   </body>
 </html>

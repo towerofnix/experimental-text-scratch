@@ -227,10 +227,8 @@ let blockify
   }
 }
 
-const tree = parse(`
-say var('(parentheses)')
-`)
-
-console.log('tree:', JSON.stringify(tree, null, 2))
-
-console.log(blockify(tree))
+// const tree = parse(`
+// say var('(parentheses)')
+// `)
+// console.log('tree:', JSON.stringify(tree, null, 2))
+// console.log(blockify(tree))
