@@ -50,7 +50,7 @@ let blockify
     },
 
     forever($0) {
-      $0 = inputify($0[1], 'stack')
+      $0 = inputify($0, 'stack')
 
       return `forever\n${ $0 }\nend`
     },
@@ -228,9 +228,10 @@ let blockify
 }
 
 const tree = parse(`
-  forrange 'i', 1, add(1, 2), {
-    says $i, 1
-  }
+forever {
+  says 'Ayy', 1
+  says 'Lmaoium', 1
+}
 `)
 
 console.log('tree:', JSON.stringify(tree, null, 2))
