@@ -179,15 +179,31 @@
         const end = inputTextarea.selectionEnd
         const value = inputTextarea.value
 
-        if (e.keyCode == 9) {
-          // When the tab key is pressed, insert 2 spaces at the cursor.
+        const unindent = () => {
+          const upToCursor = value.substring(0, start)
+          const activeLine = upToCursor.split('\n').slice(-1)[0]
+          const indent = getIndent(activeLine)
+          if (activeLine.indexOf('  ') == 0 && value.indexOf('  ', start - activeLine.length) == start - indent) {
+            inputTextarea.value = upToCursor.slice(0, -2) + value.substring(end)
+            inputTextarea.selectionStart = end - 2
+            inputTextarea.selectionEnd = end - 2
+          }
+        }
 
-          const start = inputTextarea.selectionStart
-          const end = inputTextarea.selectionEnd
-          const value = inputTextarea.value
-          inputTextarea.value = value.substring(0, start) + '  ' + value.substring(end)
-          inputTextarea.selectionStart = end + 2
-          inputTextarea.selectionEnd = end + 2
+        if (e.keyCode == 9) {
+          // When the tab key is pressed, insert 2 spaces at the cursor, unless
+          // the shift key is pressed, in which case unindent.
+
+          if (!e.shiftKey) {
+            const start = inputTextarea.selectionStart
+            const end = inputTextarea.selectionEnd
+            const value = inputTextarea.value
+            inputTextarea.value = value.substring(0, start) + '  ' + value.substring(end)
+            inputTextarea.selectionStart = end + 2
+            inputTextarea.selectionEnd = end + 2
+          } else {
+            unindent()
+          }
           e.preventDefault()
         } else if (e.keyCode == 13) {
           // When the enter key is pressed, if there's a "{" immediately
@@ -207,15 +223,7 @@
         } else if (e.keyCode == 221 && e.shiftKey) { // }
           // When the "}" key is typed, if all before the cursor on the active
           // line is whitespace, decrease the indent by 2.
-
-          const upToCursor = value.substring(0, start)
-          const activeLine = upToCursor.split('\n').slice(-1)[0]
-          const indent = getIndent(activeLine)
-          if (activeLine.indexOf('  ') == 0 && value.indexOf('  ', start - activeLine.length) == start - indent) {
-            inputTextarea.value = upToCursor.slice(0, -2) + value.substring(end)
-            inputTextarea.selectionStart = end - 2
-            inputTextarea.selectionEnd = end - 2
-          }
+          unindent()
         }
       })
     </script>
